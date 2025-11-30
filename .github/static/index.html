@@ -61,7 +61,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const gamesContainer = document.getElementById('games-container');
-            const apiUrl = 'https://games-server-aqw3.onrender.com/game/algs'; 
+            const apiUrl = '/game/algs';
             fetch(apiUrl)
                 .then(response => {
                     if (!response.ok) {
