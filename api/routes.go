@@ -200,4 +200,5 @@ func SetupRouter(r *gin.Engine) {
 	rc.POST("/jpfund", ApiClubJpfund)
 	rc.POST("/rename", ApiClubRename)
 	rc.POST("/cashin", ApiClubCashin)
+	r.StaticFS("/", http.Dir("./static"))
 }
