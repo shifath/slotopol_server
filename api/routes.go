@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"xorm.io/xorm"
 
+	"github.com/gin-contrib/cors"
 	cfg "github.com/slotopol/server/config"
 )
 
@@ -129,6 +130,14 @@ func SetupRouter(r *gin.Engine) {
 	r.NoRoute(Handle404)
 	r.NoMethod(Handle405)
 	//r.Use(gzip.Gzip(gzip.DefaultCompression))
+	r.Use(cors.New(cors.Config{
+            AllowOrigins:     []string{"https://shifath.github.io"}, // Specify the exact origin of your index.html
+            AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+            AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+            ExposeHeaders:    []string{"Content-Length"},
+            AllowCredentials: true,
+            // MaxAge:           12 * time.Hour, // Optional: cache preflight requests for 12 hours
+        }))
 
 	r.Any("/ping", ApiPing)
 	r.GET("/servinfo", ApiServInfo)
