@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Game</title>
+    <link rel="stylesheet" href="/static/slot-game/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1><span id="game-alias-title"></span></h1>
+        <p>Game ID: <span id="game-id"></span></p>
+
+        <div class="slot-machine">
+            <div class="reels">
+                <div class="reel" id="reel1"></div>
+                <div class="reel" id="reel2"></div>
+                <div class="reel" id="reel3"></div>
+                <div class="reel" id="reel4"></div>
+                <div class="reel" id="reel5"></div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="betAmount">Bet:</label>
+                    <input type="number" id="betAmount" value="100" min="1">
+                </div>
+                <div class="control-group">
+                    <label for="lines">Lines:</label>
+                    <input type="number" id="lines" value="1" min="1" max="20">
+                </div>
+                <button id="spinButton">Spin</button>
+            </div>
+
+            <div class="game-info">
+                <p>Balance: $<span id="balance">0.00</span></p>
+                <p>Last Win: $<span id="last-win">0.00</span></p>
+            </div>
+            <div id="game-status" class="status-message"></div>
+        </div>
+
+        <a href="/static/index.html" class="back-to-lobby">Back to Main Lobby</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

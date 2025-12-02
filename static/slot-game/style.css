@@ -1,0 +1,176 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.game-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 800px; /* Increased max-width for slot machine */
+    width: 90%;
+}
+
+h1 {
+    color: #0056b3;
+    margin-bottom: 20px;
+}
+
+#game-id {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+/* Slot Machine Styles */
+.slot-machine {
+    margin-top: 20px;
+    border: 5px solid #333;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #222;
+    display: inline-block; /* To center the block */
+}
+
+.reels {
+    display: flex;
+    gap: 5px;
+    height: 150px; /* Height for 3 symbols + spacing */
+    overflow: hidden; /* Hide parts of symbols outside the view */
+    border: 1px solid #555;
+    background-color: #000;
+}
+
+.reel {
+    width: 80px; /* Width of each reel */
+    border: 1px solid #444;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* Distribute symbols vertically */
+    align-items: center;
+    font-size: 2em; /* Size for text symbols */
+    color: white;
+    position: relative; /* Added for absolute positioning of reel-strip */
+    overflow: hidden; /* Ensures symbols outside the view are hidden */
+}
+.symbol {
+         height: 50px; /* Height of each symbol within the reel */
+         width: 100%;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         box-sizing: border-box; /* Include padding and border in the element's total width and height */
+         overflow: hidden; /* In case symbol text is too big */
+         font-weight: bold;
+    }
+/* New: Container for symbols within a reel, to be animated */
+.reel-strip {
+    position: absolute;
+    width: 100%;
+    transition: transform 0.5s cubic-bezier(0.1, 0.82, 0.165, 1); /* Strong ease-out deceleration with Bezier curve */
+    top: 0; /* Start at the top */
+}
+
+/* New: Keyframe animation for continuous scrolling */
+@keyframes scrollReel {
+    from { transform: translateY(0); }
+    to { transform: translateY(-650px); /* This should match NUM_UNIQUE_SYMBOLS * SYMBOL_HEIGHT from script.js */ }
+}
+
+/* New: Class to apply when spinning */
+.reel-strip.spinning {
+    animation: scrollReel 0.8s linear infinite; /* Fast, continuous loop */
+}
+
+
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    color: #eee;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+input[type="number"] {
+    width: 60px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    font-size: 1em;
+}
+
+button#spinButton {
+    background-color: #ffc107;
+    color: #333;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0; /* Override default margin */
+    transition: background-color 0.3s ease;
+}
+
+button#spinButton:hover {
+    background-color: #e0a800;
+}
+
+/* Game Info */
+.game-info {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    color: #eee;
+    font-size: 1.1em;
+}
+
+.game-info p {
+    margin: 0;
+}
+
+.status-message {
+    margin-top: 15px;
+    font-size: 1em;
+    color: #f8d7da; /* Light red for error, can be adjusted */
+}
+
+/* Back to Lobby Button */
+.back-to-lobby {
+    display: block;
+    margin-top: 25px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.back-to-lobby:hover {
+    text-decoration: underline;
+}

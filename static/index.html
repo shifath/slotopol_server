@@ -53,55 +53,21 @@
     </style>
 </head>
 <body>
-    <h1>Available Slot Games</h1>
-    <div id="games-container">
-        <p>Loading games...</p>
+    <h1>Main Game Lobby</h1>
+
+    <div id="main-selection-container" style="text-align: center; margin-top: 50px;">
+        <div class="game-card" style="display: inline-block; margin: 10px;">
+            <h2><a href="/static/keno-lobby/index.html">Play Keno</a></h2>
+            <p>Explore various Keno games.</p>
+        </div>
+        <div class="game-card" style="display: inline-block; margin: 10px;">
+            <h2><a href="/static/slot-lobby/index.html">Play Slots</a></h2>
+            <p>Discover a wide range of slot games.</p>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gamesContainer = document.getElementById('games-container');
-            const apiUrl = '/game/algs';
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    gamesContainer.innerHTML = ''; // Clear "Loading games..."
-                    if (data && data.length > 0) {
-                        data.forEach(game => {
-                            const gameCard = document.createElement('div');
-                            gameCard.classList.add('game-card');
-                            let aliasesHtml = '';
-                            if (game.aliases && game.aliases.length > 0) {
-                                game.aliases.forEach(alias => {
-                                    aliasesHtml += `
-                                        <p>Name: ${alias.name || 'N/A'}</p>
-                                        <p>Provider: ${alias.prov || 'N/A'}</p>
-                                    `;
-                                });
-                            } else {
-                                aliasesHtml = '<p>No alias information available.</p>';
-                            }
-
-                            gameCard.innerHTML = `
-                                <h2>Game Type: ${game.gt || 'N/A'}</h2>
-                                ${aliasesHtml}
-                            `;
-                            gamesContainer.appendChild(gameCard);
-                        });
-                    } else {
-                        gamesContainer.innerHTML = '<p>No games found.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching games:', error);
-                    gamesContainer.innerHTML = `<p class="error-message">Failed to load games: ${error.message}. Please ensure the slot server is running at ${apiUrl}</p>`;
-                });
-        });
+        // No script needed for this simplified main lobby
     </script>
 </body>
 </html>
