@@ -43,7 +43,7 @@ h1 {
 .reels {
     display: flex;
     gap: 5px;
-    height: 210px; /* 3 visible symbols * 70px SYMBOL_HEIGHT */
+    height: 150px; /* Height for 3 symbols + spacing */
     overflow: hidden; /* Hide parts of symbols outside the view */
     border: 1px solid #555;
     background-color: #000;
@@ -55,7 +55,7 @@ h1 {
     background-color: #111;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Ensure symbols start from the top */
+    justify-content: space-around; /* Distribute symbols vertically */
     align-items: center;
     font-size: 2em; /* Size for text symbols */
     color: white;

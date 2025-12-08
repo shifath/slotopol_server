@@ -1,0 +1,37 @@
+/* static/slot-game/themes/agt/aladdin/style.css */
+
+body {
+    background-color: #f0e68c; /* Khaki */
+}
+
+.game-container {
+    border: 5px solid #daa520; /* Goldenrod */
+    box-shadow: 0 0 15px rgba(218, 165, 32, 0.5);
+}
+
+h1 {
+    color: #8b4513; /* SaddleBrown */
+}
+
+.symbol-0 { color: #8b0000; } /* DarkRed */
+.symbol-1 { color: #006400; } /* DarkGreen */
+.symbol-2 { color: #483d8b; } /* DarkSlateBlue */
+.symbol-3 { color: #ba55d3; } /* MediumOrchid */
+.symbol-4 { color: #ffd700; } /* Gold */
+.symbol-5 { color: #dc143c; } /* Crimson */
+.symbol-6 { color: #4682b4; } /* SteelBlue */
+.symbol-7 { color: #20b2aa; } /* LightSeaGreen */
+.symbol-8 { color: #ffa500; } /* Orange */
+.symbol-9 { color: #800080; } /* Purple */
+.symbol-10 { color: #a52a2a; } /* Brown */
+.symbol-11 { color: #d2691e; } /* Chocolate */
+.symbol-12 { color: #adff2f; } /* GreenYellow */
+
+/* Ensure image symbols fit within their containers */
+.symbol-image {
+    max-width: 200%;
+    max-height: 200%;
+    object-fit: contain; /* Ensures the entire image is visible, scaled down to fit */
+    display: block; /* Remove extra space below image */
+    margin: 0 auto; /* Center the image horizontally */
+}

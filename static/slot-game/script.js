@@ -1,6 +1,26 @@
 const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzbG90b3BvbCIsImV4cCI6NDg2NzQ0NzYxNywibmJmIjoxNzA2NjQ3NjE3LCJ1aWQiOjN9.6g2Hig9ErG8IbvzkPppry5F8HJsMunZPwuQzmetGh4c'; // Test token from README
 
-document.addEventListener('DOMContentLoaded', () => {
+// Default symbol map, can be overridden by theme-specific symbols.js
+const defaultSymbolMap = {
+    0: { name: "Cherry", symbol: "🍒", class: "symbol-0", imageFileName: "reel_0.png" },
+    1: { name: "Lemon", symbol: "🍋", class: "symbol-1", imageFileName: "reel_1.png" },
+    2: { name: "Orange", symbol: "🍊", class: "symbol-2", imageFileName: "reel_2.png" },
+    3: { name: "Grapes", symbol: "🍇", class: "symbol-3", imageFileName: "reel_3.png" },
+    4: { name: "Bell", symbol: "🔔", class: "symbol-4", imageFileName: "reel_4.png" },
+    5: { name: "Star", symbol: "⭐", class: "symbol-5", imageFileName: "reel_5.png" },
+    6: { name: "Diamond", symbol: "💎", class: "symbol-6", imageFileName: "reel_6.png" },
+    7: { name: "Clover", symbol: "🍀", class: "symbol-7", imageFileName: "reel_7.png" },
+    8: { name: "Money (Scatter)", symbol: "💰", class: "symbol-8", imageFileName: "reel_8.png" },
+    9: { name: "Crown (Wild)", symbol: "👑", class: "symbol-9", imageFileName: "reel_9.png" },
+    10: { name: "Seven", symbol: "7️⃣", class: "symbol-10", imageFileName: "reel_10.png" },
+    11: { name: "BAR", symbol: "🅱️", class: "symbol-11", imageFileName: "reel_11.png" },
+    12: { name: "Free Spin", symbol: "🆓", class: "symbol-12", imageFileName: "reel_12.png" }
+};
+
+let currentSymbolMap = defaultSymbolMap; // This will be the active symbol map
+let currentBaseImagePath = `/static/slot-game/images/`; // Default image base path
+
+document.addEventListener('DOMContentLoaded', async () => {
     // Get DOM Elements
     const gameAliasTitle = document.getElementById('game-alias-title');
     const gameIdSpan = document.getElementById('game-id');
@@ -18,6 +38,81 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const gameId = params.get('gid');
     const selectedAlias = params.get('alias');
+
+    // Function to dynamically load a stylesheet, returns a Promise
+    function loadStylesheet(href) {
+        return new Promise((resolve, reject) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.onload = () => resolve(href);
+            link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
+            document.head.appendChild(link);
+        });
+    }
+
+    // Function to dynamically load a JavaScript script, returns a Promise
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => resolve(src);
+            script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+            document.head.appendChild(script);
+        });
+    }
+
+    // Function to initialize theme CSS and symbol map
+    async function initThemeAndSymbols(alias) {
+        const defaultThemePath = `/static/slot-game/style.css`;
+        let gameSpecificThemeLoaded = false;
+
+        if (alias) {
+            const gameSpecificThemePath = `/static/slot-game/themes/${alias}/style.css`;
+            try {
+                await loadStylesheet(gameSpecificThemePath);
+                console.log(`Successfully loaded theme CSS for alias: ${alias}`);
+                gameSpecificThemeLoaded = true;
+                currentBaseImagePath = `/static/slot-game/themes/${alias}/images/`; // Update base image path
+
+                // Attempt to load game-specific symbols.js
+                const gameSpecificSymbolsPath = `/static/slot-game/themes/${alias}/symbols.js`;
+                try {
+                    // The loaded script is expected to set a global variable like 'gameSpecificSymbolMap'
+                    await loadScript(gameSpecificSymbolsPath);
+                    // Check if the script actually defined a symbol map
+                    if (window.gameSpecificSymbolMap) {
+                        currentSymbolMap = window.gameSpecificSymbolMap;
+                        console.log(`Successfully loaded and applied symbols for alias: ${alias}`);
+                        delete window.gameSpecificSymbolMap; // Clean up global scope
+                    } else {
+                        console.warn(`Game-specific symbols.js for '${alias}' loaded but did not define window.gameSpecificSymbolMap.`);
+                    }
+                } catch (error) {
+                    console.warn(error.message + `. Using default symbols.`);
+                }
+
+            } catch (error) {
+                console.warn(error.message + `. Falling back to default CSS and symbols.`);
+            }
+        } else {
+            console.log("No alias provided. Using default CSS and symbols.");
+        }
+
+        // Load default stylesheet if game-specific CSS was not loaded
+        if (!gameSpecificThemeLoaded) {
+            try {
+                await loadStylesheet(defaultThemePath);
+                console.log(`Successfully loaded default theme CSS.`);
+            } catch (error) {
+                console.error(error.message + `. Critical CSS failed to load.`);
+            }
+        }
+    }
+
+    // Call initThemeAndSymbols early to load appropriate theme and symbols
+    await initThemeAndSymbols(selectedAlias);
+
     // const initialWallet = parseFloat(params.get('wallet')) || 0; // Remove this line, we will fetch the current wallet
 
     // Function to fetch and update wallet balance
@@ -67,28 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch and update wallet balance immediately on load
     fetchAndUpdateWallet();
 
-    // Placeholder symbols (map numerical IDs to visual representations)
-    // Assuming backend sends integers for symbols
-    const symbolMap = {
-        0: { name: "🍒", class: "symbol-0" }, // Cherry
-        1: { name: "🍋", class: "symbol-1" }, // Lemon
-        2: { name: "🍊", class: "symbol-2" }, // Orange
-        3: { name: "🍇", class: "symbol-3" }, // Grapes
-        4: { name: "🔔", class: "symbol-4" }, // Bell
-        5: { name: "⭐", class: "symbol-5" }, // Star
-        6: { name: "💎", class: "symbol-6" }, // Diamond
-        7: { name: "🍀", class: "symbol-7" }, // Clover
-        8: { name: "💰", class: "symbol-8" }, // Money (Scatter)
-        9: { name: "👑", class: "symbol-9" }, // Crown (Wild)
-        10: { name: "7️⃣", class: "symbol-10" }, // Seven
-        11: { name: "🅱️", class: "symbol-11" }, // BAR
-        12: { name: "🆓", class: "symbol-12" } // Free Spin
-    };
+
 
     // Animation Constants
     const SYMBOL_HEIGHT = 50; // Pixels, increased for better emoji visibility and proportion
     const NUM_VISIBLE_SYMBOLS = 3; // Number of symbols visible in the reel window, matches .reels height / SYMBOL_HEIGHT
-    const NUM_UNIQUE_SYMBOLS = Object.keys(symbolMap).length; // Number of unique symbols in the game
+    const NUM_UNIQUE_SYMBOLS = Object.keys(currentSymbolMap).length; // Number of unique symbols in the game
 
     // Function to render reels for static display (initial load, post-spin final state)
     function displayReels(screenData) {
@@ -110,10 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Populate with the actual symbols to be displayed
             const reelSymbols = (screenData && screenData[r] && Array.isArray(screenData[r])) ? screenData[r] : Array(numRows).fill(0);
             reelSymbols.forEach(symbolId => {
-                const symbolInfo = symbolMap[symbolId] || { name: '?', class: 'symbol-unknown' };
+                const symbolInfo = currentSymbolMap[symbolId] || { name: '?', symbol: '?', class: 'symbol-unknown', imageFileName: 'unknown.png' };
                 const symbolDiv = document.createElement('div');
                 symbolDiv.classList.add('symbol', symbolInfo.class);
-                symbolDiv.textContent = symbolInfo.name; // Add text content
+                
+                const img = document.createElement('img');
+                img.src = `${currentBaseImagePath}${symbolInfo.imageFileName}`;
+                img.alt = symbolInfo.symbol; // Use the emoji for alt text
+                img.classList.add('symbol-image'); // Add a class for potential styling
+                symbolDiv.appendChild(img);
+                
                 reelStripDiv.appendChild(symbolDiv);
             });
             // Ensure the reel strip is positioned at the top for static display
@@ -145,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reelStripDiv.style.transform = `translateY(0px)`; // Reset transform to start animation from the top
 
             let animatedStripSymbols = [];
-            const allSymbolIds = Object.keys(symbolMap).map(Number);
+            const allSymbolIds = Object.keys(currentSymbolMap).map(Number);
 
             // 1. Prepend current visible symbols (from lastDisplayedScreen)
             // This ensures the animation visually starts from what was last seen
@@ -166,10 +251,16 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Populate the reel strip with the full animatedStripSymbols sequence
             animatedStripSymbols.forEach(symbolId => {
-                const symbolInfo = symbolMap[symbolId] || { name: '?', class: 'symbol-unknown' };
+                const symbolInfo = currentSymbolMap[symbolId] || { name: '?', symbol: '?', class: 'symbol-unknown', imageFileName: 'unknown.png' };
                 const symbolDiv = document.createElement('div');
                 symbolDiv.classList.add('symbol', symbolInfo.class);
-                symbolDiv.textContent = symbolInfo.name; // Add text content
+                
+                const img = document.createElement('img');
+                img.src = `${currentBaseImagePath}${symbolInfo.imageFileName}`;
+                img.alt = symbolInfo.symbol; // Use the emoji for alt text
+                img.classList.add('symbol-image'); // Add a class for potential styling
+                symbolDiv.appendChild(img);
+                
                 reelStripDiv.appendChild(symbolDiv);
             });
         }
@@ -184,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let r = 0; r < numReels; r++) {
         const reelSymbols = [];
         for (let s = 0; s < numRows; s++) {
-            reelSymbols.push(Math.floor(Math.random() * Object.keys(symbolMap).length));
+            reelSymbols.push(Math.floor(Math.random() * Object.keys(currentSymbolMap).length));
         }
         initialScreen.push(reelSymbols);
     }
