@@ -26,3 +26,16 @@ Line 154:
 `} else if err = BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, admin.UID, props.Wallet+arg.Sum, arg.Sum); err != nil {`
 
 **Reason for change:** Facilitate testing of "Add Coins" functionality.
+
+## 2. Mobile-Friendliness Adjustments and SYMBOL_HEIGHT Mismatch
+
+**File:** `static/slot-game/style.css` and `static/game-launcher/script.js` (implicit)
+
+**Description:** Responsive CSS styles have been added to `static/slot-game/style.css` using media queries (`@media (max-width: 768px)`) to make the slot machine layout mobile-friendly. This involves reducing `SYMBOL_HEIGHT`, `.reels` height, `.reel` width, and adjusting font sizes.
+
+**Potential Mismatch:** The `SYMBOL_HEIGHT` constant in `static/game-launcher/script.js` (currently `150`) is a fixed JavaScript value used for animation calculations. In the mobile view, the CSS `SYMBOL_HEIGHT` is set to `75px`. This discrepancy means the JavaScript animation calculation (`targetSymbolOffset = offsetBeforeTarget * SYMBOL_HEIGHT`) will still use `150` for its internal logic, which might lead to visual inconsistencies during the reel spin animation on mobile devices, as the CSS visual size and JS internal calculation size won't match.
+
+**How to fully resolve (requires further development):**
+To completely resolve this, the `SYMBOL_HEIGHT` constant in `script.js` would need to be dynamically determined at runtime based on the actual rendered size of a symbol (e.g., by reading its computed style from the DOM) or by using CSS variables that can be accessed via JavaScript and updated by media queries.
+
+**Reason for change:** Improve user experience on mobile devices.

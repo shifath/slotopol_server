@@ -396,4 +396,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             spinButton.disabled = false; // Re-enable button
         }
     });
-});
+});``
