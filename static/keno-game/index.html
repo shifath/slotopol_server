@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keno Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Keno Game: <span id="game-alias-title"></span></h1>
+        <p>Game ID: <span id="game-id">N/A</span></p>
+
+        <div class="keno-board">
+            <!-- Keno numbers 1-80 will be generated here by JavaScript -->
+        </div>
+        <p>Selected Numbers: <span id="selected-numbers-display">None</span> (Max 10)</p>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="betAmount">Bet Amount:</label>
+                <input type="number" id="betAmount" value="10" min="1">
+            </div>
+            <button id="playButton" disabled>DRAW</button> <!-- Disabled until numbers are selected -->
+            <button id="clearSelectionButton">Clear</button>
+        </div>
+
+        <div class="game-info">
+            <p>Balance: $<span id="balance">0.00</span></p>
+            <p>Last Win: $<span id="last-win">0.00</span></p>
+        </div>
+
+        <div id="game-status" class="status-message"></div>
+
+        <a href="../index.html" class="back-to-lobby">Back to Lobby</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

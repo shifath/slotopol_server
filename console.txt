@@ -1,0 +1,85 @@
+quest URL
+http://localhost:8080/game/new
+Request Method
+POST
+Status Code
+401 Unauthorized
+Remote Address
+[::1]:8080
+Referrer Policy
+strict-origin-when-cross-origin
+content-length
+68
+content-type
+application/json; charset=utf-8
+date
+Mon, 08 Dec 2025 16:05:06 GMT
+server
+slotopol/v0.0.0 (windows; amd64)
+www-authenticate
+Basic realm="slotopol", charset="UTF-8"
+www-authenticate
+JWT realm="slotopol", charset="UTF-8"
+accept
+*/*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-GB,en-US;q=0.9,en;q=0.8
+authorization
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzbG90b3BvbCIsImV4cCI6NDkxODgwOTUwNiwibmJmIjoxNzY1MjA5NTA2LCJ1aWQiOjN9.or9J4ElKkukp6glkZWVIhQ0puPaVA-kaaQ
+cache-control
+no-cache
+connection
+keep-alive
+content-length
+34
+content-type
+application/json
+host
+localhost:8080
+origin
+http://localhost:8080
+pragma
+no-cache
+referer
+http://localhost:8080/static/game-launcher/?alias=AGT%2FAI
+sec-ch-ua
+"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
+
+
+{cid: 1, uid: 3, alias: "AGT/AI"}
+alias
+: 
+"AGT/AI"
+cid
+: 
+1
+uid
+: 
+3
+
+
+
+{what: "token signature is invalid: signature is invalid", code: 8}
+code
+: 
+8
+what
+: 
+"token signature is invalid: signature is invalid"
+
+
+{"what":"token signature is invalid: signature is invalid","code":8}

@@ -1,4 +1,4 @@
-const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzbG90b3BvbCIsImV4cCI6MTc2NDcwMTUzMSwibmJmIjoxNzY0NjE1MTMxLCJ1aWQiOjF9.CfJEwWCM77KNNy881_UawP_BqKcmyFdIxrVM_5wd4WE';
+const bearerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzbG90b3BvbCIsImV4cCI6NDg2NzQ0NzYxNywibmJmIjoxNzA2NjQ3NjE3LCJ1aWQiOjN9.6g2Hig9ErG8IbvzkPppry5F8HJsMunZPwuQzmetGh4c';
 
 document.addEventListener('DOMContentLoaded', () => {
     const gameAliasSpan = document.getElementById('game-alias');
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const commonParams = `gid=${gameId}&alias=${encodeURIComponent(selectedAlias)}&wallet=${initialWallet}`;
 
                 if (selectedAlias.toLowerCase().includes('keno')) {
-                    redirectPath = `/static/keno/index.html?${commonParams}`;
+                    redirectPath = `/static/keno-game/index.html?${commonParams}`;
                 } else {
                     // Assuming all other games are slot games for now
                     redirectPath = `/static/slot-game/index.html?${commonParams}`;

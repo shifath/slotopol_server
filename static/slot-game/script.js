@@ -70,23 +70,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Placeholder symbols (map numerical IDs to visual representations)
     // Assuming backend sends integers for symbols
     const symbolMap = {
-        0: "🍒", // Cherry
-        1: "🍋", // Lemon
-        2: "🍊", // Orange
-        3: "🔔", // Bell
-        4: "⭐", // Star
-        5: "7️⃣", // Seven
-        6: "🍇", // Grapes
-        7: "💎",  // Diamond
-        8: "♠️",  // Spade
-        9: "♥️",  // Heart
-        10: "♣️", // Club
-        11: "♦️", // Diamond (playing card)
-        12: "👑"   // Crown
+        0: { name: "🍒", class: "symbol-0" }, // Cherry
+        1: { name: "🍋", class: "symbol-1" }, // Lemon
+        2: { name: "🍊", class: "symbol-2" }, // Orange
+        3: { name: "🍇", class: "symbol-3" }, // Grapes
+        4: { name: "🔔", class: "symbol-4" }, // Bell
+        5: { name: "⭐", class: "symbol-5" }, // Star
+        6: { name: "💎", class: "symbol-6" }, // Diamond
+        7: { name: "🍀", class: "symbol-7" }, // Clover
+        8: { name: "💰", class: "symbol-8" }, // Money (Scatter)
+        9: { name: "👑", class: "symbol-9" }, // Crown (Wild)
+        10: { name: "7️⃣", class: "symbol-10" }, // Seven
+        11: { name: "🅱️", class: "symbol-11" }, // BAR
+        12: { name: "🆓", class: "symbol-12" } // Free Spin
     };
 
     // Animation Constants
-    const SYMBOL_HEIGHT = 50; // Pixels, matches .symbol height in CSS
+    const SYMBOL_HEIGHT = 50; // Pixels, increased for better emoji visibility and proportion
     const NUM_VISIBLE_SYMBOLS = 3; // Number of symbols visible in the reel window, matches .reels height / SYMBOL_HEIGHT
     const NUM_UNIQUE_SYMBOLS = Object.keys(symbolMap).length; // Number of unique symbols in the game
 
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reelsContainer.innerHTML = ''; // Clear existing reels
 
         const numReels = 5;
-        const numRows = 3;
+        const numRows = 4;
 
         for (let r = 0; r < numReels; r++) {
             const reelDiv = document.createElement('div');
@@ -110,10 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Populate with the actual symbols to be displayed
             const reelSymbols = (screenData && screenData[r] && Array.isArray(screenData[r])) ? screenData[r] : Array(numRows).fill(0);
             reelSymbols.forEach(symbolId => {
-                const symbolChar = symbolMap[symbolId] || '❓';
+                const symbolInfo = symbolMap[symbolId] || { name: '?', class: 'symbol-unknown' };
                 const symbolDiv = document.createElement('div');
-                symbolDiv.classList.add('symbol');
-                symbolDiv.textContent = symbolChar;
+                symbolDiv.classList.add('symbol', symbolInfo.class);
+                symbolDiv.textContent = symbolInfo.name; // Add text content
                 reelStripDiv.appendChild(symbolDiv);
             });
             // Ensure the reel strip is positioned at the top for static display
@@ -166,10 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Populate the reel strip with the full animatedStripSymbols sequence
             animatedStripSymbols.forEach(symbolId => {
-                const symbolChar = symbolMap[symbolId] || '❓';
+                const symbolInfo = symbolMap[symbolId] || { name: '?', class: 'symbol-unknown' };
                 const symbolDiv = document.createElement('div');
-                symbolDiv.classList.add('symbol');
-                symbolDiv.textContent = symbolChar;
+                symbolDiv.classList.add('symbol', symbolInfo.class);
+                symbolDiv.textContent = symbolInfo.name; // Add text content
                 reelStripDiv.appendChild(symbolDiv);
             });
         }
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial dummy reel display (before first spin)
     let initialScreen = [];
     const numReels = 5; // Assuming 5 reels
-    const numRows = 3;  // Assuming 3 rows per reel
+    const numRows = 4;  // Assuming 4 rows per reel
     for (let r = 0; r < numReels; r++) {
         const reelSymbols = [];
         for (let s = 0; s < numRows; s++) {

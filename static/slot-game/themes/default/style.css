@@ -1,0 +1,40 @@
+/* styles for static/slot-game/themes/default/style.css */
+
+.symbol {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-size: contain; /* Ensure the image fits within the symbol div */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-position: center; /* Center the image */
+}
+
+/* Specific styles for each symbol using background images */
+.symbol-0 { background-image: url('../images/symbol_0.png'); }
+.symbol-1 { background-image: url('../images/symbol_1.png'); }
+.symbol-2 { background-image: url('../images/symbol_2.png'); }
+.symbol-3 { background-image: url('../images/symbol_3.png'); }
+.symbol-4 { background-image: url('../images/symbol_4.png'); }
+.symbol-5 { background-image: url('../images/symbol_5.png'); }
+.symbol-6 { background-image: url('../images/symbol_6.png'); }
+.symbol-7 { background-image: url('../images/symbol_7.png'); }
+.symbol-8 { background-image: url('../images/symbol_8.png'); }
+.symbol-9 { background-image: url('../images/symbol_9.png'); }
+.symbol-10 { background-image: url('../images/symbol_10.png'); }
+.symbol-11 { background-image: url('../images/symbol_11.png'); }
+.symbol-12 { background-image: url('../images/symbol_12.png'); }
+
+/* New: Keyframe animation for continuous scrolling - Moved from main style.css */
+@keyframes scrollReel {
+    from { transform: translateY(0); }
+    to { transform: translateY(-650px); /* This should match NUM_UNIQUE_SYMBOLS * SYMBOL_HEIGHT from script.js */ }
+}
+
+/* New: Class to apply when spinning - Moved from main style.css */
+.reel-strip.spinning {
+    animation: scrollReel 0.8s linear infinite; /* Fast, continuous loop */
+}
