@@ -136,11 +136,7 @@ func ApiPropsWalletAdd(c *gin.Context) {
 		return
 	}
 
-	var admin, al = MustAdmin(c, arg.CID)
-	if al&ALbooker == 0 {
-		Ret403(c, AEC_prop_walletadd_noaccess, ErrNoAccess)
-		return
-	}
+
 
 	var props *Props
 	if props, ok = user.props.Get(arg.CID); !ok {
@@ -154,8 +150,8 @@ func ApiPropsWalletAdd(c *gin.Context) {
 
 	// update wallet as transaction
 	if Cfg.ClubInsertBuffer > 1 {
-		go BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, admin.UID, props.Wallet+arg.Sum, arg.Sum)
-	} else if err = BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, admin.UID, props.Wallet+arg.Sum, arg.Sum); err != nil {
+		go BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, arg.UID, props.Wallet+arg.Sum, arg.Sum)
+	} else if err = BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, arg.UID, props.Wallet+arg.Sum, arg.Sum); err != nil {
 		Ret500(c, AEC_prop_walletadd_sql, err)
 		return
 	}

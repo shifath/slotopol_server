@@ -1,0 +1,28 @@
+# Temporary Changes in slotopol_server
+
+This file documents temporary modifications made for development and testing purposes. These changes should be reverted before deploying to a production environment.
+
+## 1. Bypassed ALbooker Access Check for /prop/wallet/add
+
+**File:** `api/props.go`
+
+**Description:** The access control check requiring `ALbooker` permission for the `ApiPropsWalletAdd` function has been commented out. This allows any authenticated user to add coins, facilitating front-end testing of the "Add Coins" button without needing to set up administrative user accounts.
+
+**Lines affected (approximately):** Lines 140-143 (within `func ApiPropsWalletAdd`)
+
+**How to revert:**
+Uncomment the following lines within the `ApiPropsWalletAdd` function:
+```go
+	var admin, al = MustAdmin(c, arg.CID)
+	if al&ALbooker == 0 {
+		Ret403(c, AEC_prop_walletadd_noaccess, ErrNoAccess)
+		return
+	}
+```
+And revert the changes made to the `BankBat` calls (lines 153 and 154) to use `admin.UID` instead of `arg.UID`:
+Line 153:
+`go BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, admin.UID, props.Wallet+arg.Sum, arg.Sum)`
+Line 154:
+`} else if err = BankBat[arg.CID].Add(cfg.XormStorage, arg.UID, admin.UID, props.Wallet+arg.Sum, arg.Sum); err != nil {`
+
+**Reason for change:** Facilitate testing of "Add Coins" functionality.

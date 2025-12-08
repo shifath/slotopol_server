@@ -22,17 +22,34 @@ let currentBaseImagePath = `/static/slot-game/images/`; // Default image base pa
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Get DOM Elements
-    const gameAliasTitle = document.getElementById('game-alias-title');
-    const gameIdSpan = document.getElementById('game-id');
     const reelsContainer = document.querySelector('.reels');
-    const betAmountInput = document.getElementById('betAmount');
-    const linesInput = document.getElementById('lines');
+    const lineButtonsContainer = document.querySelector('.line-buttons');
     const spinButton = document.getElementById('spinButton');
     const balanceSpan = document.getElementById('balance');
     const lastWinSpan = document.getElementById('last-win');
-    const gameStatusDiv = document.getElementById('game-status');
+    // gameStatusDiv is still used for error messages
+    const gameStatusDiv = document.getElementById('game-status'); 
     let lastWinningAmount = 0.00; // New variable to store the last actual win
     let lastDisplayedScreen = []; // Stores the last displayed reel state
+    let selectedLines = 1; // Default to 1 line
+
+    // Initialize the '1 Line' button as active
+    const initialLineButton = lineButtonsContainer.querySelector(`[data-lines="1"]`);
+    if (initialLineButton) {
+        initialLineButton.classList.add('active');
+    }
+
+    // Add event listeners to line buttons
+    lineButtonsContainer.querySelectorAll('.line-button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove 'active' class from all buttons
+            lineButtonsContainer.querySelectorAll('.line-button').forEach(btn => btn.classList.remove('active'));
+            // Add 'active' class to the clicked button
+            button.classList.add('active');
+            selectedLines = parseInt(button.dataset.lines);
+            console.log('Selected lines:', selectedLines);
+        });
+    });
 
     // Parse URL parameters
     const params = new URLSearchParams(window.location.search);
@@ -149,24 +166,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Display initial game info
-    if (selectedAlias) {
-        gameAliasTitle.textContent = selectedAlias;
-    } else {
-        gameAliasTitle.textContent = 'Generic Slot Game';
-    }
-    gameIdSpan.textContent = gameId || 'N/A';
-    // balanceSpan.textContent = initialWallet.toFixed(2); // Remove this line
-    lastWinSpan.textContent = lastWinningAmount.toFixed(2); // Initial last win
-
     // Fetch and update wallet balance immediately on load
     fetchAndUpdateWallet();
 
 
 
     // Animation Constants
-    const SYMBOL_HEIGHT = 50; // Pixels, increased for better emoji visibility and proportion
-    const NUM_VISIBLE_SYMBOLS = 3; // Number of symbols visible in the reel window, matches .reels height / SYMBOL_HEIGHT
+    const SYMBOL_HEIGHT = 150; // Pixels, increased for better emoji visibility and proportion
+    const NUM_VISIBLE_SYMBOLS = 4; // Number of symbols visible in the reel window, matches .reels height / SYMBOL_HEIGHT
     const NUM_UNIQUE_SYMBOLS = Object.keys(currentSymbolMap).length; // Number of unique symbols in the game
 
     // Function to render reels for static display (initial load, post-spin final state)
@@ -211,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // It takes the currently displayed screen and the target screen from the server
     function prepareReelsForSpin(currentScreen, targetScreen) {
         const numReels = 5;
-        const numRows = 3;
+        const numRows = 4;
         // This constant defines how many 'full' rotations of unique symbols
         // are included in the spinning part of the strip.
         // A higher number means a longer spin animation.
@@ -291,26 +298,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        spinButton.disabled = true; // Disable button during spin
-        gameStatusDiv.textContent = 'Spinning...';
-        gameStatusDiv.style.color = 'blue';
-
-        const betAmount = parseInt(betAmountInput.value);
-        const lines = parseInt(linesInput.value);
-
-        if (isNaN(betAmount) || betAmount < 1) {
-            gameStatusDiv.textContent = 'Please enter a valid bet amount.';
-            gameStatusDiv.style.color = 'red';
-            spinButton.disabled = false;
-            return;
-        }
-        if (isNaN(lines) || lines < 1 || lines > 20) {
-            gameStatusDiv.textContent = 'Please enter valid number of lines (1-20).';
-            gameStatusDiv.style.color = 'red';
-            spinButton.disabled = false;
-            return;
-        }
-
+                spinButton.disabled = true; // Disable button during spin
+        
+                const betAmount = 100; // Fixed bet amount
+                const lines = selectedLines; // Use the value from the line buttons
         try {
             const response = await fetch('/slot/spin', {
                 method: 'POST',
@@ -389,16 +380,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                                     lastWinningAmount = data.game.gain;
                                 }
                                 lastWinSpan.textContent = lastWinningAmount.toFixed(2);
-
-                                let message = `Spun! Gain: $${(data.game.gain || 0).toFixed(2)}. `;
-                                if (data.wins && data.wins.length > 0) {
-                                    message += `Wins: ${data.wins.length} lines.`;
-                                    gameStatusDiv.style.color = 'green';
-                                } else {
-                                    message += `No win.`;
-                                    gameStatusDiv.style.color = 'orange';
-                                }
-                                gameStatusDiv.textContent = message;
                             });
                         }
 
